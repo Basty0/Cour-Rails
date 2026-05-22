@@ -1,49 +1,63 @@
-# 17 - Architecture Enterprise Rails
+# 17 - Architecture Rails pour projet plus large
 
 ## Objectif
 
-Faire evoluer une petite API Rails vers une application large sans la transformer en chaos.
+Faire évoluer une petite API Rails vers une application plus grande sans la transformer en chaos technique.
 
-## Probleme classique
+## Problème classique
 
-Au debut, Rails est tres simple. Ensuite arrivent:
+Au début, Rails est très simple. Puis arrivent :
 
-- gros controllers
-- models trop intelligents
-- logique dupliquee
-- queries complexes partout
+- des contrôleurs trop gros
+- des modèles trop intelligents
+- de la logique dupliquée
+- des requêtes complexes un peu partout
+
+## Pourquoi l'architecture devient importante
+
+Une petite application peut survivre avec quelques raccourcis.
+
+Une grande application, non.
+
+Quand l'équipe grandit et que le domaine métier se complexifie, il faut mieux structurer le code.
 
 ## Briques utiles
 
 ### Services
 
-Pour les use cases metier.
+Ils portent les use cases métier.
 
 ### Queries
 
-Pour isoler des lectures complexes:
+Ils isolent des lectures complexes.
+
+Exemple :
 
 - `PostsQuery.new(user: current_user).visible`
 
 ### Concerns
 
-Utiles avec moderation. Un concern qui masque du code confus n'est pas une victoire.
+Ils servent à partager un comportement commun.
+
+### Règle sur les concerns
+
+Un concern peut être utile, mais il peut aussi masquer du code confus. Il ne faut donc pas l'utiliser comme cache-misère architectural.
 
 ### Forms
 
-Pratique pour la validation de payloads complexes ou multi-models.
+Ils peuvent aider à valider des payloads complexes ou à coordonner plusieurs objets.
 
 ### Interactors
 
-Option utile si ton equipe aime modeler les use cases comme des commandes explicites.
+Certaines équipes aiment représenter les use cases sous forme de commandes explicites.
 
 ### Validators
 
-Quand les validations de domaine depassent le simple model.
+Ils deviennent utiles quand les validations dépassent le simple modèle ActiveRecord.
 
-## Organisation grande application
+## Organisation d'une grande application
 
-Une structure frequente:
+Une structure fréquente :
 
 - `app/services`
 - `app/queries`
@@ -51,25 +65,28 @@ Une structure frequente:
 - `app/serializers`
 - `app/forms`
 
-## Clean architecture Rails
+## Règles pragmatiques
 
-Il ne faut pas sur-architecturer trop tot. Le bon seuil:
+- une abstraction doit supprimer une vraie douleur
+- le nom doit exprimer une intention métier
+- les dépendances doivent rester explicites
+- les use cases importants doivent être faciles à tester
 
-- quand les cas metier se repetent
-- quand plusieurs controllers reutilisent les memes operations
-- quand les tests deviennent fragiles
+## Quand ajouter des couches
 
-## Regles pragmatiques
+Ajoute une nouvelle couche quand :
 
-- une abstraction doit supprimer une douleur reelle
-- preferer des noms metier
-- garder les dependances explicites
-- tester les use cases importants en isolation
+- la logique se répète
+- plusieurs contrôleurs réutilisent les mêmes opérations
+- les tests deviennent fragiles
+- le code perd en lisibilité
 
-## Comparaison Laravel
+## Comparaison avec Laravel
 
-Les memes enjeux existent avec Actions, DTO, Repositories, Services et Domains. Rails n'evite pas la dette de structure. Il la repousse seulement mieux au demarrage.
+Les mêmes enjeux existent avec les Actions, DTO, Services ou couches Domain dans Laravel.
+
+Rails ne supprime pas la nécessité d'une bonne architecture. Il te donne simplement un démarrage plus cohérent.
 
 ## Ce que tu dois retenir
 
-Une architecture enterprise Rails reussie reste idiomatique Rails. Elle n'essaie pas de nier le framework, elle organise la complexite autour de lui.
+Une architecture Rails mature doit rester idiomatique Rails. Le but n'est pas d'empiler des patterns, mais d'organiser la complexité de manière claire et progressive.

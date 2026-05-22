@@ -1,20 +1,26 @@
-# 22 - Projet API Complet
+# 22 - Projet API complet
 
 ## Objectif
 
-Assembler tout le parcours dans un projet final realiste.
+Assembler tout le parcours dans un projet final réaliste qui serve de preuve de compétence.
 
-## Idee de projet
+## Idée de projet
 
-Construire une API de marketplace ou de gestion de contenu avancee avec:
+Construire une API de marketplace ou de gestion de contenu avancée avec :
 
 - authentification JWT
 - CRUD de ressources
-- roles et permissions
-- upload image
-- notifications realtime
-- jobs async
+- rôles et permissions
+- upload d'image
+- notifications en temps réel
+- jobs asynchrones
 - tests
+
+## Pourquoi ce projet final est important
+
+Ce projet doit te forcer à relier toutes les briques du cours.
+
+Le but n'est pas seulement que "ça fonctionne", mais que l'architecture soit lisible, cohérente et prête pour une vraie équipe backend.
 
 ## Modules du projet
 
@@ -22,19 +28,19 @@ Construire une API de marketplace ou de gestion de contenu avancee avec:
 
 - inscription
 - connexion
-- deconnexion
+- déconnexion
 - profil courant
 
 ### 2. CRUD principal
 
-Exemple:
+Exemple :
 
 - users
 - posts
 - comments
 - categories
 
-### 3. Roles permissions
+### 3. Rôles et permissions
 
 - user
 - editor
@@ -53,53 +59,53 @@ Exemple:
 ### 6. Queue
 
 - email de bienvenue
-- traitement image
-- webhook async
+- traitement d'image
+- webhook asynchrone
 
 ### 7. Pagination
 
-- index pagines
-- meta de pagination
+- index paginés
+- métadonnées de pagination
 
 ### 8. Tests
 
-- request specs pour endpoints critiques
-- specs services
-- specs policies
+- request specs pour les endpoints critiques
+- specs de services
+- specs de policies
 
-## Architecture propre
+## Architecture propre attendue
 
-Le projet doit idealement contenir:
+Le projet doit idéalement contenir :
 
-- controllers fins
-- models avec validations et relations
-- services pour les use cases
-- policies pour l'autorisation
-- serializers pour les payloads
-- jobs pour l'asynchrone
+- des contrôleurs fins
+- des modèles avec validations et relations
+- des services pour les use cases
+- des policies pour l'autorisation
+- des serializers pour les payloads
+- des jobs pour l'asynchrone
 
-## Definition de done
+## Définition de done
 
-Le projet est reussi si:
+Le projet est réussi si :
 
-- l'API est versionnee
-- les erreurs sont consistentes
-- les permissions sont testees
-- les uploads sont securises
+- l'API est versionnée
+- les erreurs sont cohérentes
+- les permissions sont testées
+- les uploads sont sécurisés
 - les jobs tournent hors HTTP
-- le deploiement est preparable sans rework majeur
+- le déploiement est préparé sans gros rework
 
-## Idee de roadmap de realisation
+## Roadmap de réalisation
 
 1. Initialiser l'API Rails.
-2. Ajouter User + auth JWT.
-3. Ajouter une ressource metier principale.
-4. Ajouter policies.
+2. Ajouter `User` et l'auth JWT.
+3. Ajouter une ressource métier principale.
+4. Ajouter les policies.
 5. Ajouter serializers et pagination.
 6. Ajouter upload et jobs.
-7. Ajouter tests.
-8. Nettoyer pour production.
+7. Ajouter les tests.
+8. Préparer la production.
 
 ## Ce que tu dois retenir
 
-Ce projet final doit servir de preuve de competence. L'objectif n'est pas seulement que "ca marche", mais que l'architecture soit lisible pour une equipe backend moderne.
+Le projet final doit montrer que tu sais concevoir une API Rails complète, pas seulement additionner des fonctionnalités isolées.

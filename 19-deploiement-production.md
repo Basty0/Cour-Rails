@@ -1,81 +1,88 @@
-# 19 - Deploiement Production
+# 19 - Déploiement en production
 
 ## Objectif
 
-Preparer une API Rails pour un environnement de production fiable.
+Préparer une API Rails pour un environnement de production fiable, stable et surveillable.
 
-## Base de donnees production
+## Base de données en production
 
-PostgreSQL reste le choix naturel. Pense:
+PostgreSQL reste le choix naturel.
 
-- sauvegardes
-- pool de connexions
-- index
-- monitoring
+Il faut penser à :
+
+- la sauvegarde
+- le pool de connexions
+- les index
+- le monitoring
 
 ## Puma
 
-Puma sert les requetes applicatives. Il faut regler:
+Puma sert les requêtes applicatives.
 
-- nombre de workers
-- nombre de threads
-- timeout
+Il faut réfléchir à :
+
+- la mémoire disponible
+- le nombre de workers
+- le nombre de threads
+- les timeouts
 
 ## Nginx
 
-Souvent place devant Puma pour:
+Nginx est souvent placé devant Puma pour :
 
-- reverse proxy
-- compression
-- gestion TLS
-- headers
+- le reverse proxy
+- la compression
+- la gestion TLS
+- certains headers HTTP
 
 ## Docker
 
-Docker simplifie la reproductibilite mais n'est pas obligatoire. Il devient utile si:
+Docker améliore la reproductibilité, mais n'est pas obligatoire.
+
+Il devient très utile si :
 
 - tu veux uniformiser les environnements
-- tu deploies sur une plateforme conteneurisee
+- tu déploies dans une plateforme conteneurisée
 
 ## Render et Railway
 
-Tres bons choix pour aller vite sur des projets modernes avec peu d'ops manuelles.
+Ce sont de très bons choix pour aller vite avec peu d'opérations manuelles.
 
 ## VPS
 
-Plus de controle, plus de responsabilite:
+Le VPS donne plus de contrôle, mais aussi plus de responsabilités :
 
-- securite
-- updates
+- sécurité
+- mises à jour
 - monitoring
 - logs
 
 ## Variables d'environnement
 
-Tu dois externaliser:
+Tu dois externaliser :
 
-- secrets
-- URLs externes
-- credentials base
-- config Redis/S3/mail
+- les secrets
+- les URLs externes
+- les identifiants de base
+- la configuration Redis, S3 ou mail
 
 ## Logs
 
-Surveille:
+Surveille :
 
-- erreurs applicatives
-- temps de reponse
-- jobs echoues
-- SQL lent
+- les erreurs applicatives
+- les temps de réponse
+- les jobs échoués
+- les requêtes SQL lentes
 
-## Securite production
+## Sécurité en production
 
 - HTTPS partout
-- credentials proteges
-- CSP et headers si necessaire
-- gems a jour
-- acces admin restreint
+- secrets protégés
+- gems à jour
+- accès admin restreint
+- configuration propre des en-têtes si nécessaire
 
 ## Ce que tu dois retenir
 
-Un deploiement reussi n'est pas juste un `deploy`. C'est un systeme stable: base, app server, secrets, logs, jobs et supervision.
+Un bon déploiement ne consiste pas seulement à rendre l'application accessible. Il faut aussi penser fiabilité, sécurité, observabilité et maintenance.

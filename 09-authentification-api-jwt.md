@@ -2,75 +2,121 @@
 
 ## Objectif
 
-Mettre en place une authentification moderne pour une API Rails stateless.
+Mettre en place une authentification moderne pour une API Rails stateless et comprendre ce que signifie réellement sécuriser un accès API.
 
-## Stack frequente
+## Pourquoi l'authentification est importante
+
+Une API expose souvent :
+
+- des données privées
+- des opérations sensibles
+- des actions réservées à certains utilisateurs
+
+Sans authentification claire, il est impossible de savoir qui appelle l'API.
+
+## Stack fréquente
 
 - `devise` pour la gestion utilisateur
 - `devise-jwt` pour l'authentification par token
 
 ## Devise
 
-Devise fournit:
+Devise fournit :
 
-- inscription
-- connexion
-- hash de mot de passe
-- helpers d'authentification
+- l'inscription
+- la connexion
+- le hash des mots de passe
+- des helpers d'authentification
 
-## devise-jwt
+### Pourquoi Devise est utile
 
-Avec `devise-jwt`, l'API peut emettre un token JWT apres connexion.
+Devise évite de réécrire toute la base de l'authentification à la main.
+
+Il permet de partir sur une solution éprouvée, à condition de comprendre ce qu'il fait.
+
+## `devise-jwt`
+
+Avec `devise-jwt`, l'API peut émettre un token JWT après connexion.
+
+### Ce qu'est un JWT
+
+Un JWT est un token signé que le client envoie ensuite à chaque requête protégée.
+
+Cela permet à l'API de reconnaître l'utilisateur sans session serveur classique.
 
 ## Register API
 
-Tu exposes une route d'inscription qui cree l'utilisateur avec validations claires.
+Tu exposes une route d'inscription qui crée l'utilisateur avec des validations claires.
+
+### Règle
+
+L'inscription ne doit pas seulement créer un utilisateur. Elle doit aussi :
+
+- valider correctement les données
+- renvoyer une réponse propre
+- éviter les messages trop bavards sur la sécurité
 
 ## Login API
 
-Flux classique:
+Flux classique :
 
 1. le client envoie email + mot de passe
-2. Rails valide les credentials
-3. un JWT est renvoye
+2. Rails valide les identifiants
+3. un JWT est renvoyé
 4. le client stocke ce token
 
-## Authorization header
+## Header d'autorisation
 
-Le client renvoie:
+Le client renvoie généralement :
 
 ```http
 Authorization: Bearer <token>
 ```
 
-## current_user
+### Explication
 
-Une fois le token valide, Rails peut identifier `current_user` dans les controllers.
+À chaque requête protégée, le token permet à Rails de retrouver l'utilisateur authentifié.
+
+## `current_user`
+
+Une fois le token valide, Rails peut identifier `current_user` dans les contrôleurs.
+
+### Pourquoi c'est central
+
+`current_user` sert ensuite à :
+
+- savoir qui appelle l'API
+- limiter l'accès à certaines ressources
+- appliquer des policies
 
 ## Refresh token
 
-Le JWT pur sans refresh impose souvent des tokens courts. Pour une app serieuse, pense a:
+Le JWT pur sans refresh impose souvent des tokens courts.
 
-- access token court
-- refresh token gere separement
-- rotation ou revocation
+Pour une application sérieuse, pense à :
 
-Selon le besoin, certaines equipes preferent une solution sur mesure plutot qu'une config magique.
+- un access token court
+- un refresh token géré séparément
+- une logique de rotation ou de révocation
 
-## Securisation API
+### Règle
+
+Ne pense pas uniquement "connexion". Pense cycle de vie complet du token.
+
+## Sécurisation API
 
 - mot de passe fort
 - expiration de token
-- revocation si necessaire
+- révocation si nécessaire
 - HTTPS obligatoire
 - messages d'erreur sobres
 
-## Comparaison Laravel
+## Comparaison avec Laravel
 
-- equivalent conceptuel de Sanctum ou JWT packages
-- Devise est tres puissant mais peut sembler plus "framework-first"
-- il faut comprendre le flux, pas juste copier une config
+- l'équivalent conceptuel peut être Sanctum ou un package JWT
+- Devise est très puissant mais demande d'accepter son cadre
+- il faut comprendre le flux, pas seulement copier une configuration
 
 ## Ce que tu dois retenir
 
-L'auth ne se limite pas a "generer un token". Il faut penser cycle de vie du token, revocation, expiration et lisibilite du flux de connexion.
+L'authentification API ne se résume pas à générer un token. Il faut penser identité, durée de vie, révocation, sécurité du transport et cohérence de tout le flux de connexion.

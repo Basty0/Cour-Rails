@@ -2,24 +2,45 @@
 
 ## Objectif
 
-Comprendre comment une requete traverse Rails et comment les dossiers du projet se repartissent les responsabilites.
+Comprendre comment une requête traverse Rails et comment les dossiers du projet se répartissent les responsabilités.
+
+## Vue générale
+
+Rails API reste fondé sur les mêmes principes que Rails classique, mais avec un focus backend.
+
+Tu dois retenir le flux principal :
+
+1. une route reçoit la requête
+2. un contrôleur traite l'entrée HTTP
+3. le contrôleur appelle un modèle ou un service
+4. Rails renvoie une réponse JSON
 
 ## MVC dans Rails
 
-- `Model`: donnees, validations, relations, logique liee au domaine
-- `View`: faible ou absente dans une API pure
-- `Controller`: reception HTTP, orchestration courte, rendu JSON
+- `Model` : données, validations, relations et logique liée au domaine
+- `View` : beaucoup moins visible en API pure
+- `Controller` : point d'entrée HTTP, orchestration courte, rendu de la réponse
 
-Dans une API Rails, la vue HTML disparait presque, mais l'idee de separation reste.
+Même si une API n'affiche pas de pages HTML, la logique de séparation reste importante.
 
-## Cycle d'une requete HTTP
+## Cycle d'une requête HTTP
 
-1. La requete entre par le routeur.
-2. Une route selectionne un controller et une action.
-3. Le controller lit `params`.
-4. Il delegue au model ou a un service.
-5. Rails serialize la reponse en JSON.
-6. Le client recoit le status HTTP et le body.
+Quand un client appelle ton API :
+
+1. Rails lit l'URL et le verbe HTTP
+2. le routeur choisit un contrôleur et une action
+3. les paramètres arrivent dans `params`
+4. l'action exécute une logique métier
+5. Rails renvoie un JSON et un code HTTP
+
+## Pourquoi ce cycle doit être clair
+
+Si tu ne comprends pas ce flux, tu risques de mettre la logique au mauvais endroit :
+
+- trop de logique dans le contrôleur
+- requêtes SQL mal placées
+- réponses JSON improvisées
+- sécurité dispersée
 
 ## Structure des dossiers
 
@@ -33,26 +54,38 @@ Dans une API Rails, la vue HTML disparait presque, mais l'idee de separation res
 - `lib`
 - `spec` ou `test`
 
-## Role de chaque dossier
+## Rôle de chaque dossier
 
 `app/controllers`
-: entree HTTP, auth, rendu, erreurs.
+: reçoit la requête, lit les paramètres, appelle le domaine, renvoie la réponse.
 
 `app/models`
-: persistence, validations, associations, scopes.
+: représente les entités métier, les validations et les relations.
 
 `app/jobs`
-: taches asynchrones.
+: exécute les tâches asynchrones.
 
 `config`
-: routes, environnement, initializers.
+: contient les routes, les environnements et les initializers.
 
 `db`
-: schema, migrations, seeds.
+: contient les migrations, le schéma et les seeds.
+
+## Règle de structure
+
+Chaque dossier doit garder son rôle.
+
+Par exemple :
+
+- un contrôleur ne doit pas contenir toute la logique métier
+- un modèle ne doit pas devenir un conteneur de tout le projet
+- une réponse JSON ne doit pas être improvisée dans tous les sens
 
 ## Architecture API only
 
-Avec `rails new mon_api --api`, Rails retire plusieurs middlewares et briques HTML inutiles. Tu gardes le coeur backend:
+Avec `rails new mon_api --api`, Rails retire une partie des couches inutiles pour une API HTML-less.
+
+Tu conserves le cœur utile pour un backend moderne :
 
 - routing
 - controllers
@@ -63,29 +96,37 @@ Avec `rails new mon_api --api`, Rails retire plusieurs middlewares et briques HT
 
 ## Convention Rails
 
-Rails repose sur le nommage:
+Rails repose fortement sur le nommage.
 
-- classe `Post` -> table `posts`
-- `Api::V1::PostsController` -> chemin de fichier associe
-- fichier et nom de constante doivent rester alignes
+Exemples :
 
-Quand tu respectes ces conventions, tu configures presque rien.
+- `Post` correspond généralement à `posts`
+- `Api::V1::PostsController` correspond à un chemin de fichier cohérent
+- les noms de classes, modules et fichiers doivent rester alignés
 
-## Difference avec Laravel
+## Pourquoi cette convention compte
 
-- Laravel expose souvent plus de dossiers "utilitaires" des le depart.
-- Rails est plus compact au debut.
-- Les controllers Rails sont souvent plus courts.
-- ActiveRecord encourage parfois plus de logique model-centree que les pratiques Laravel modernes.
+Quand tu respectes les conventions :
+
+- tu écris moins de configuration
+- ton code se lit plus vite
+- un autre développeur Rails retrouve immédiatement ses repères
+
+## Différence avec Laravel
+
+- Laravel expose souvent davantage de structures utilitaires dès le départ
+- Rails démarre plus compact
+- Rails repose plus fortement sur le nommage et la convention
+- un projet Rails devient très agréable dès que l'équipe respecte le cadre
 
 ## Architecture saine pour une API
 
-- controllers fins
-- models expressifs
-- services pour les cas metier complexes
+- contrôleurs fins
+- modèles expressifs
+- services pour les cas métiers complexes
 - policies pour l'autorisation
-- serializers ou presenters pour des reponses stables
+- serializers ou presenters pour les réponses stables
 
 ## Ce que tu dois retenir
 
-Rails API est simple en surface mais tres structure. Le vrai gain vient du respect du flux route -> controller -> model/service -> JSON.
+Rails API est simple en apparence, mais très structuré. Le vrai gain vient du respect du flux route -> contrôleur -> domaine -> réponse JSON.

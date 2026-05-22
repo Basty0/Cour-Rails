@@ -1,12 +1,12 @@
-# 14 - Active Storage Upload
+# 14 - Active Storage et upload de fichiers
 
 ## Objectif
 
-Gerer des fichiers dans Rails proprement, avec stockage local ou cloud.
+Gérer des fichiers dans Rails proprement, avec stockage local ou cloud, sans négliger la validation, la sécurité et la performance.
 
 ## Active Storage
 
-Active Storage est la solution native Rails pour attacher des fichiers a des models.
+Active Storage est la solution native de Rails pour attacher des fichiers à des modèles.
 
 ## Exemple
 
@@ -16,57 +16,79 @@ class User < ApplicationRecord
 end
 ```
 
-## Upload image
+### Explication
 
-Depuis un controller API, tu peux recevoir un fichier dans les params et l'attacher au model.
+Ici, un utilisateur peut avoir un avatar attaché.
 
-## Validations fichiers
+Rails gère alors :
 
-Rails ne couvre pas tout nativement sur les validations metier de fichier. On ajoute souvent:
+- le lien entre le modèle et le fichier
+- le stockage
+- les métadonnées associées
 
-- type MIME
+## Upload d'image
+
+Depuis un contrôleur API, tu peux recevoir un fichier dans les paramètres et l'attacher au modèle.
+
+### Règle
+
+Un upload ne doit jamais être pensé comme "je reçois juste un fichier". Il faut aussi penser :
+
+- validation
+- poids
+- type
+- sécurité
+- stratégie de stockage
+
+## Validations de fichiers
+
+Rails ne couvre pas tout nativement pour les validations métier de fichier. On ajoute souvent :
+
+- type MIME autorisé
 - taille maximale
-- presence si necessaire
+- présence si nécessaire
 
 ## Stockage cloud
 
-Options courantes:
+Options courantes :
 
-- local en developpement
+- local en développement
 - Amazon S3 en production
 - parfois Cloudinary selon les besoins
 
 ## S3
 
-Configuration typique:
+Configuration typique :
 
 - bucket
-- region
+- région
 - credentials
-- service declare dans `storage.yml`
+- service déclaré dans `storage.yml`
 
-## Optimisation image
+## Optimisation d'image
 
-Selon le besoin:
+Selon le besoin :
 
 - variantes
 - redimensionnement
 - compression
 
-Pour une API, pense aussi a ne pas renvoyer les fichiers bruts dans les payloads principaux.
+### Règle
+
+Si le traitement devient coûteux, il vaut mieux le déplacer dans un background job.
 
 ## Bonnes pratiques
 
-- stocker l'URL ou la reference, pas le binaire dans le JSON
-- securiser les acces
+- stocker l'URL ou la référence, pas le binaire dans le JSON
+- sécuriser les accès
 - limiter la taille des uploads
-- traiter les transformations en background job si lourd
+- traiter les transformations lourdes en asynchrone
 
-## Comparaison Laravel
+## Comparaison avec Laravel
 
-- proche de la logique `Storage` + uploads Laravel
-- Rails te donne un flux plus centralise via Active Storage
+- c'est proche de la logique `Storage` + upload Laravel
+- Rails te donne un flux plus centralisé via Active Storage
 
 ## Ce que tu dois retenir
 
-Un upload n'est pas juste "recevoir un fichier". Il faut penser validation, stockage, URL, securite et cout de traitement.
+Un upload bien conçu demande plus qu'un simple attachement de fichier. Il faut penser validation, stockage, diffusion, sécurité et coût de traitement.

@@ -1,31 +1,43 @@
-# 13 - ActionCable WebSocket
+# 13 - ActionCable et WebSocket
 
 ## Objectif
 
-Comprendre comment Rails gere le temps reel pour des notifications, un chat ou des mises a jour live.
+Comprendre comment Rails gère le temps réel pour des notifications, un chat ou des mises à jour live.
+
+## Pourquoi utiliser du temps réel
+
+Le temps réel permet de pousser une information du serveur vers le client sans attendre un nouveau rafraîchissement manuel.
+
+Exemples :
+
+- nouvelle notification
+- nouveau message dans un chat
+- changement de statut d'un traitement
 
 ## ActionCable
 
 ActionCable est la couche WebSocket native de Rails.
 
-Elle permet:
+Elle permet :
 
-- connexion persistante client/serveur
-- abonnement a des canaux
-- diffusion d'evenements
+- une connexion persistante client/serveur
+- l'abonnement à des canaux
+- la diffusion d'événements
 
 ## Cas d'usage
 
-- notifications temps reel
+- notifications en temps réel
 - chat
 - statut de traitement
 - dashboard live
 
-## Structure generale
+## Structure générale
 
-- channels
-- stream nommes
-- diffusion depuis le serveur
+Tu retrouves généralement :
+
+- des channels
+- des streams nommés
+- des diffusions côté serveur
 
 ## Exemple conceptuel
 
@@ -37,41 +49,41 @@ class NotificationsChannel < ApplicationCable::Channel
 end
 ```
 
-Puis:
+Puis :
 
 ```ruby
 ActionCable.server.broadcast("notifications_1", { message: "Nouvelle alerte" })
 ```
 
-## Chat
+### Explication
 
-Le schema mental:
+Le client s'abonne à un canal. Ensuite, le serveur peut pousser un message sur ce canal.
 
-1. le client s'abonne a un channel
+## Schéma mental du chat ou de la notification
+
+1. le client s'abonne à un channel
 2. le serveur diffuse un payload
-3. le client met a jour son interface
+3. le client met à jour son interface
 
-## Architecture realtime
+## Règles d'architecture realtime
 
-Pour rester propre:
+- garder un payload simple
+- sécuriser la connexion
+- déclencher la diffusion depuis une logique métier claire
+- surveiller la charge
 
-- payload simple
-- auth de connexion claire
-- diffusion declenchee depuis le domaine metier
-- monitoring de charge
-
-## Comparaison Laravel Reverb
-
-- meme promesse: temps reel integre
-- Rails profite d'une integration native historique avec ActionCable
-- le choix depend ensuite de la charge, de l'ecosysteme et de l'architecture front
-
-## Limites a connaitre
+## Limites à connaître
 
 - tous les projets n'ont pas besoin de WebSocket
-- la complexite d'exploitation augmente
-- il faut penser scalabilite et state des connexions
+- l'exploitation devient plus complexe
+- il faut penser scalabilité et état des connexions
+
+## Comparaison avec Laravel Reverb
+
+- la promesse est similaire : temps réel intégré
+- Rails bénéficie d'une solution native historique avec ActionCable
+- le choix dépend ensuite de la charge, du front et de l'infrastructure
 
 ## Ce que tu dois retenir
 
-Le temps reel doit repondre a un vrai besoin produit. Sinon, il ajoute surtout de la complexite operationnelle.
+Le temps réel doit répondre à un vrai besoin produit. Sinon, il ajoute surtout de la complexité technique et opérationnelle.

@@ -1,60 +1,72 @@
-# 18 - Hotwire Turbo Stimulus
+# 18 - Hotwire, Turbo et Stimulus
 
 ## Objectif
 
 Comprendre ce que Rails propose nativement pour construire des interfaces dynamiques sans SPA classique.
 
+## Pourquoi ce chapitre existe dans un cours API
+
+Même si ton focus principal est l'API, comprendre Hotwire aide à voir la vision globale de Rails.
+
+Rails n'est pas seulement bon pour les API. Il est aussi fort pour livrer rapidement des interfaces modernes avec peu de JavaScript.
+
 ## Hotwire
 
-Hotwire regroupe surtout:
+Hotwire regroupe principalement :
 
 - Turbo
 - Stimulus
 
 ## Turbo
 
-Turbo accelere les interactions HTML sans recharger toute la page:
+Turbo accélère les interactions HTML sans recharger toute la page.
 
-- navigation rapide
-- formulaires
-- partial updates
-- streams
+Il peut gérer :
+
+- la navigation rapide
+- les formulaires
+- les mises à jour partielles
+- les streams
 
 ## Stimulus
 
-Stimulus apporte une couche JavaScript legere, ciblee sur le comportement.
+Stimulus apporte une couche JavaScript légère, ciblée sur le comportement.
 
-## SPA sans React
+### Idée centrale
 
-Pour beaucoup de produits internes ou apps CRUD, Hotwire permet:
+Tu n'écris pas une grosse application frontend complète. Tu ajoutes seulement le JavaScript nécessaire là où le comportement l'exige.
+
+## Une SPA sans React ?
+
+Pour beaucoup de produits internes ou d'applications CRUD, Hotwire permet :
 
 - moins de JavaScript
 - moins de duplication front/back
-- integration naturelle avec Rails
+- une intégration très naturelle avec Rails
 
 ## Realtime frontend Rails
 
-Turbo Streams + ActionCable peuvent pousser des mises a jour en direct.
+Turbo Streams et ActionCable peuvent pousser des mises à jour en direct.
 
 ## Quand c'est utile
 
 - dashboards admin
 - outils internes
 - produits CRUD
-- interfaces ou le SEO ou la simplicite priment
+- interfaces où la simplicité prime
 
-## Quand eviter
+## Quand éviter
 
-- front tres interactif type produit design complexe
-- equipe frontend separee avec stack JS dediee
-- besoin fort de client state complexe
+- front très interactif type produit riche côté client
+- équipe frontend séparée avec stack JavaScript dédiée
+- besoin fort de state client complexe
 
-## Difference avec Livewire ou Inertia
+## Différence avec Livewire ou Inertia
 
-- proche de Livewire dans l'esprit de productivite
-- moins "SPA framework centric" qu'Inertia
-- tres coherent si Rails pilote tout le produit
+- l'esprit est proche de Livewire sur la productivité
+- l'approche est moins centrée SPA qu'Inertia
+- la cohérence est très forte quand Rails pilote toute l'application
 
 ## Ce que tu dois retenir
 
-Meme si ton focus est API, comprendre Hotwire aide a voir la force globale de Rails: livrer vite avec tres peu de couches techniques.
+Hotwire montre bien la force de Rails : réduire le nombre de couches techniques quand le produit n'a pas besoin d'une grosse SPA complexe.

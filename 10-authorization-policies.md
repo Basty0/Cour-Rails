@@ -1,17 +1,26 @@
-# 10 - Authorization Policies
+# 10 - Authorization et policies
 
 ## Objectif
 
-Controler qui peut faire quoi dans l'API sans melanger securite et logique metier.
+Contrôler qui peut faire quoi dans l'API sans mélanger sécurité, règles d'accès et logique métier.
+
+## Authentification vs autorisation
+
+Il faut bien distinguer les deux notions :
+
+- l'authentification répond à "qui es-tu ?"
+- l'autorisation répond à "as-tu le droit de faire cela ?"
+
+Tu peux être authentifié et ne pas avoir le droit de modifier une ressource.
 
 ## Pundit
 
-Pundit est la solution la plus courante pour l'autorisation Rails.
+Pundit est la solution la plus courante pour l'autorisation dans Rails.
 
-Il repose sur:
+Il repose sur :
 
 - une policy par ressource
-- des methodes comme `show?`, `update?`, `destroy?`
+- des méthodes comme `show?`, `update?`, `destroy?`
 - des scopes pour filtrer ce qui est visible
 
 ## Exemple de policy
@@ -24,7 +33,15 @@ class PostPolicy < ApplicationPolicy
 end
 ```
 
-## Utilisation controller
+### Explication
+
+Ici, la règle est simple :
+
+- un administrateur peut modifier
+- le propriétaire du post peut modifier
+- les autres ne peuvent pas
+
+## Utilisation dans le contrôleur
 
 ```ruby
 def update
@@ -34,15 +51,21 @@ def update
 end
 ```
 
-## Roles et permissions
+### Explication
 
-Structure simple et saine:
+`authorize @post` demande à Pundit de vérifier la policy correspondant à l'action en cours.
+
+## Rôles et permissions
+
+Structure simple et saine :
 
 - `user`
 - `manager`
 - `admin`
 
-Evite de disperser les checks de role partout dans les controllers.
+### Règle
+
+Évite de disperser les vérifications de rôle partout dans les contrôleurs. Les règles doivent rester centralisées.
 
 ## Policy scopes
 
@@ -56,30 +79,34 @@ class PostPolicy < ApplicationPolicy
 end
 ```
 
-Tres utile pour securiser les listes.
+### Explication
 
-## Securite des endpoints
+Le scope décide quelles ressources l'utilisateur a le droit de voir dans une liste.
 
-Verifier:
+C'est essentiel pour sécuriser les endpoints d'index.
 
-- acces a la ressource
-- portee des listes
-- actions sensibles
-- admin endpoints
+## Sécurité des endpoints
 
-## Comparaison Laravel
+Vérifie toujours :
 
-- conceptuellement proche des Policies Laravel
-- integration tres directe
-- impose une discipline utile si l'equipe la respecte partout
+- l'accès à la ressource
+- la portée des listes
+- les actions sensibles
+- les endpoints d'administration
 
 ## Bonnes pratiques
 
 - toujours autoriser explicitement
 - tester les policies
-- centraliser les regles
-- ne pas cacher l'autorisation dans des if disperses
+- centraliser les règles
+- éviter les `if role == ...` dispersés partout
+
+## Comparaison avec Laravel
+
+- conceptuellement, c'est très proche des Policies Laravel
+- la logique est familière si tu viens de Laravel
+- la discipline reste la même : ne pas laisser les règles d'accès se répandre dans tout le code
 
 ## Ce que tu dois retenir
 
-Une API propre se securise en couche explicite. Les policies rendent l'intention lisible et testable.
+Une API propre se sécurise avec une couche d'autorisation explicite. Les policies rendent l'intention lisible, centralisée et testable.

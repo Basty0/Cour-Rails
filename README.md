@@ -1,27 +1,44 @@
-# Cours Rails API Pour Developpeur Laravel
+# Cours Rails API pour Développeur Laravel
 
 Ce dossier contient un parcours progressif pour apprendre Rails en mode API quand on vient de Laravel.
 
 ## Objectif
 
-Construire une vraie comprehension de Rails API moderne sans surcharge inutile.
+Construire une vraie compréhension de Rails API moderne, sans surcharge inutile, avec une progression logique et des explications claires.
+
+## Philosophie du cours
+
+Ce parcours suit une règle simple :
+
+- un fichier doit t'apprendre une vraie compétence
+- chaque notion doit être reliée à un cas concret
+- la comparaison avec Laravel doit t'aider à comprendre, pas à te perdre
+- on cherche une compréhension durable, pas seulement des commandes à copier
 
 ## Logique du parcours
 
 1. Comprendre la philosophie Rails.
 2. Installer un environnement propre.
-3. Maitriser l'architecture et les bases Ruby utiles.
+3. Maîtriser l'architecture et les bases Ruby utiles.
 4. Construire une API REST propre.
-5. Ajouter persistence, auth, tests, performance et deploiement.
-6. Finir par un projet final et une roadmap de progression.
+5. Ajouter persistance, authentification, tests, performance et déploiement.
+6. Terminer par un projet final et une roadmap de progression.
 
-## Conseils d'utilisation
+## Comment utiliser ce cours
 
-- Lire les fichiers dans l'ordre numerique.
-- Reproduire chaque exemple dans un vrai projet.
-- Comparer mentalement avec Laravel a chaque etape.
-- Ne pas sauter `03-ruby-les-bases-pour-developpeur-laravel.md`.
-- Utiliser `22-projet-api-complet.md` comme exercice de synthese.
+- Lire les fichiers dans l'ordre numérique.
+- Reproduire les exemples dans un vrai projet Rails API.
+- Comparer mentalement avec Laravel à chaque étape.
+- Ne pas sauter [03-ruby-les-bases-pour-developpeur-laravel.md](</Users/moramarket/Development/Cours/Cour Rails/03-ruby-les-bases-pour-developpeur-laravel.md>) : c'est la base de lecture du framework.
+- Utiliser [22-projet-api-complet.md](</Users/moramarket/Development/Cours/Cour Rails/22-projet-api-complet.md>) comme exercice de synthèse.
+
+## Ce que tu vas apprendre
+
+- comment penser en "Rails Way"
+- comment structurer une API Rails propre
+- comment lire Ruby sans blocage
+- comment utiliser ActiveRecord, les contrôleurs, les routes, l'auth et les tests
+- comment faire évoluer un projet Rails vers une architecture sérieuse
 
 ## Index
 

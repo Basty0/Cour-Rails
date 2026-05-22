@@ -1,8 +1,21 @@
-# 12 - Background Jobs Queues
+# 12 - Background jobs et files d'attente
 
 ## Objectif
 
-Executer les taches lentes hors du cycle HTTP pour garder une API rapide.
+Exécuter les tâches lentes hors du cycle HTTP pour garder une API rapide et agréable à utiliser.
+
+## Pourquoi sortir certaines tâches de la requête
+
+Une requête HTTP doit idéalement répondre vite.
+
+Si tu fais dans la requête :
+
+- un envoi d'email
+- un traitement d'image
+- un appel externe lent
+- une génération de document
+
+tu risques de ralentir inutilement l'expérience utilisateur.
 
 ## ActiveJob
 
@@ -19,62 +32,100 @@ class SendWelcomeEmailJob < ApplicationJob
 end
 ```
 
+### Explication
+
+Un job représente une tâche différée.
+
+Ici :
+
+- le job reçoit l'identifiant d'un utilisateur
+- il recharge l'utilisateur
+- il envoie un email de bienvenue
+
+## Pourquoi passer l'ID et non l'objet
+
+Bonne règle :
+
+- passer un identifiant
+- recharger la donnée dans le job
+
+Cela évite de transporter un objet potentiellement périmé ou lourd.
+
 ## Sidekiq
 
-Pour la production, Sidekiq est une reference frequente:
+En production, Sidekiq est une référence fréquente.
 
-- robuste
-- rapide
-- bien integre a Redis
+Il est apprécié pour :
+
+- sa robustesse
+- sa rapidité
+- sa bonne intégration avec Redis
 
 ## Redis
 
-Redis sert de backend de queue pour Sidekiq dans la plupart des setups.
+Redis sert souvent de backend de queue pour Sidekiq.
 
-## Jobs async
+Il stocke les jobs en attente et permet leur traitement asynchrone.
+
+## Jobs asynchrones
 
 ```ruby
 SendWelcomeEmailJob.perform_later(user.id)
 ```
 
-Le job est planifie sans bloquer la reponse HTTP.
+### Explication
+
+`perform_later` planifie le job sans bloquer la réponse HTTP.
+
+Le client reçoit donc une réponse plus rapidement.
 
 ## Cas typiques
 
 - envoi d'email
-- generation de PDF
+- génération de PDF
 - import CSV
-- webhooks
 - traitement d'image
+- webhooks
 
 ## Retry
 
-Une bonne queue doit gerer les echecs temporaires. Sidekiq offre des retries automatiques tres utiles.
+Une bonne file d'attente doit gérer les échecs temporaires.
+
+Sidekiq offre des retries automatiques très utiles si :
+
+- un service externe répond mal
+- un timeout survient
+- une ressource n'est pas encore disponible
 
 ## Scheduling
 
-Tu peux planifier:
+Tu peux planifier :
 
-- nettoyage
-- synchronisations
-- relances
+- du nettoyage
+- des synchronisations
+- des relances
 
-Avec Sidekiq, cron jobs ou outils complementaires.
+Cela peut se faire avec Sidekiq et des outils complémentaires de planification.
 
-## Architecture queue
+## Règles d'architecture
 
-Bon reflexe:
+- faire des jobs petits
+- garder un payload minimal
+- passer des IDs plutôt que des objets complets
+- viser l'idempotence quand c'est possible
 
-- jobs petits
-- payload minimal
-- id plutot qu'objet complet
-- idempotence si possible
+### Que veut dire "idempotent"
 
-## Comparaison Laravel
+Un job idempotent peut être rejoué sans créer de dégâts fonctionnels.
 
-- `ShouldQueue` et les jobs Laravel sont tres proches en idee
-- Rails se repose sur ActiveJob comme facade commune
+C'est très important quand un retry automatique se produit.
+
+## Comparaison avec Laravel
+
+- `ShouldQueue` et les jobs Laravel sont très proches dans l'idée
+- Rails se repose sur ActiveJob comme interface commune
+- Sidekiq joue souvent un rôle comparable à l'outillage queue sérieux côté production
 
 ## Ce que tu dois retenir
 
-Ce qui est lent, fragile ou non critique pour la reponse HTTP doit sortir vers une queue. La performance percue d'une API depend beaucoup de cette discipline.
+Ce qui est lent, fragile ou non critique pour la réponse HTTP doit souvent partir dans une file d'attente. Une API perçue comme rapide dépend énormément de cette discipline.

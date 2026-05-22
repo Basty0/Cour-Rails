@@ -1,68 +1,104 @@
-# 16 - Cache Performance
+# 16 - Cache et performance
 
 ## Objectif
 
-Ameliorer les temps de reponse et la tenue en charge sans casser la coherence du code.
+Améliorer les temps de réponse et la tenue en charge sans casser la cohérence du code.
+
+## Premier principe
+
+La performance Rails ne commence pas par le cache.
+
+Elle commence par :
+
+- des requêtes SQL saines
+- des payloads JSON raisonnables
+- une bonne séparation entre synchrone et asynchrone
 
 ## Cache Rails
 
-Rails fournit plusieurs couches de cache:
+Rails fournit plusieurs couches de cache :
 
 - fragment cache
 - low-level cache
 - cache store Redis ou autre
 
-Dans une API, le plus utile est souvent le low-level cache et le cache de requetes ou de calculs couteux.
+Dans une API, le plus utile est souvent :
+
+- le low-level cache
+- le cache de calculs coûteux
+- le cache de certaines lectures stables
 
 ## Redis
 
-Redis sert souvent a la fois pour:
+Redis sert souvent à la fois pour :
 
-- cache
-- queue Sidekiq
-- rate limiting selon l'architecture
+- le cache
+- Sidekiq
+- parfois du rate limiting ou des mécanismes d'état léger
 
 ## Eager loading
 
-Premier levier de performance tres concret:
+Premier levier de performance très concret :
 
 ```ruby
 Post.includes(:user, :comments)
 ```
 
+### Pourquoi
+
+Avant de penser cache, il faut d'abord corriger les requêtes inutiles.
+
 ## Optimisation SQL
 
 - bons index
 - pagination
-- requetes plus simples
-- selection des associations utiles seulement
+- requêtes plus simples
+- sélection des associations utiles seulement
 
 ## Bullet gem
 
-Bullet detecte les N+1 et les eager loads inutiles pendant le developpement.
+Bullet détecte :
+
+- les N+1
+- les eager loads inutiles
+
+C'est un excellent outil de développement pour voir rapidement où l'application gaspille des requêtes.
 
 ## Performance API
 
-Verifier:
+Quand tu analyses une API, regarde :
 
-- temps controller
-- temps SQL
-- taille des payloads JSON
-- nombre de requetes
-- temps des services externes
+- le temps contrôleur
+- le temps SQL
+- la taille des payloads JSON
+- le nombre de requêtes
+- le temps passé dans les services externes
 
 ## Puma
 
-Puma est le serveur applicatif standard. Il faut regler:
+Puma est le serveur applicatif standard.
 
-- workers
-- threads
-- memoire disponible
+Il faut réfléchir à :
 
-## Sidekiq optimization
+- la mémoire disponible
+- le nombre de workers
+- le nombre de threads
 
-Un backend parait plus rapide quand les traitements lents sont bien deportes vers Sidekiq.
+## Sidekiq et performance perçue
+
+Un backend paraît plus rapide quand les traitements lents sont bien déplacés vers Sidekiq.
+
+### Exemple
+
+Au lieu de :
+
+- envoyer un email dans la requête
+
+tu peux :
+
+- répondre vite
+- lancer l'email en arrière-plan
 
 ## Ce que tu dois retenir
 
-La performance Rails ne commence pas par le cache. Elle commence par des requetes saines, des payloads maitrises et une bonne separation synchrone/asynchrone.
+Le cache est utile, mais ce n'est pas le premier réflexe. Commence par des requêtes propres, une bonne architecture et des traitements asynchrones bien placés.
